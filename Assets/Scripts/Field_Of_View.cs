@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player_Light : MonoBehaviour
+public class Field_Of_View : MonoBehaviour
 {
 
     // Variable Declaration
@@ -22,27 +22,29 @@ public class Player_Light : MonoBehaviour
     int rays;
     float delta_angle;
     float bleed;
+    private float cur_direction;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
+        direction = 0f;
+        radius = 3f;
+        fov = 90f;
+        rays = 200;
+        delta_angle = fov / rays;
+        bleed = 0.2f;
 
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    private void LateUpdate()
     {
-        fov = 360f;
-        rays = 200;
-        delta_angle = fov / rays;
-        radius = 3f;
-        direction = 0f;
-        bleed = 0.2f;
 
         root = transform.position;
-        //root = Vector3.zero;
+
+        cur_direction = direction;
 
 
         vertices = new Vector3[rays + 2];
@@ -53,7 +55,7 @@ public class Player_Light : MonoBehaviour
 
         for (int i = 0; i < rays + 1; i++)
         {
-            float rad_angle = direction * Mathf.PI / 180;
+            float rad_angle = cur_direction * Mathf.PI / 180;
             Vector3 direction_vector = new Vector3(Mathf.Cos(rad_angle), Mathf.Sin(rad_angle));
 
             RaycastHit2D raycast_hit = Physics2D.Raycast(root, direction_vector, radius, ray_mask);
@@ -75,7 +77,7 @@ public class Player_Light : MonoBehaviour
                 }
             }
 
-            direction -= delta_angle;
+            cur_direction -= delta_angle;
 
             if (i > 0)
             {
@@ -92,13 +94,13 @@ public class Player_Light : MonoBehaviour
         mesh.triangles = triangles;
     }
 
-    void SetRadius(float new_radius)
+    public void SetRadius(float new_radius)
     {
         this.radius = new_radius;
     }
 
-    void SetDirection(float new_direction)
+    public void SetDirection(float new_direction)
     {
-        this.direction = new_direction;
+        this.direction = new_direction-fov/2f;
     }
 }
