@@ -5,51 +5,59 @@ using UnityEngine;
 public class Player_Movement : MonoBehaviour
 {
     // Variable Declaration
-    private Vector2 position;
-    private Vector2 dpos;
-    int dx; // Step change on x-axis
-    int dy; // Step change on y-axis
+    private Vector3 position;
+    private Vector3 direction_vector;
+    private Vector3 last_move;
+    [SerializeField] private LayerMask ray_mask;
 
     // Start is called before the first frame update
     void Start()
     {
         position = transform.position; // Initialize starting position of the player
-        //dpos = 0;
+        last_move = Vector3.zero;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //dx = 0;
-        //dy = 0;
-
-        //position = transform.position; // Initialize starting position of the player
+        direction_vector = Vector2.zero;
+        position = transform.position; // Initialize starting position of the player
 
         // Input to Movement Map
         // TODO: Convert to mappable keys for accessibility
         if ( Input.GetKey(KeyCode.W) ) 
         {
-            //dy -= 4;
-            position += 5f * Time.deltaTime * Vector2.up;
+            direction_vector += Vector3.up;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            position += 5f * Time.deltaTime * Vector2.down;
-            //dy += 4;
+            direction_vector += Vector3.down;
         }
         if (Input.GetKey(KeyCode.A))
         {
-            position += 5f * Time.deltaTime * Vector2.left;
-            //dx -= 4;
+            direction_vector += Vector3.left;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            position += 5f * Time.deltaTime * Vector2.right;
-            //dx += 4;
+            direction_vector += Vector3.right;
         }
 
-        //position = position*5f*Time.deltaTime*;
+        RaycastHit2D raycast_hit = Physics2D.Raycast(transform.position,  direction_vector, 5f*Time.deltaTime, ray_mask);
 
-        transform.position = position;
+        if (raycast_hit.collider == null)
+        {
+            transform.position += direction_vector * 5f * Time.deltaTime;
+            last_move = direction_vector * 5f * Time.deltaTime;
+        }
+        else if(transform.position.Equals(raycast_hit.point))
+        {
+            transform.position -= last_move;
+            transform.position += direction_vector * 5f * Time.deltaTime;
+            last_move = direction_vector * 5f * Time.deltaTime;
+        }
+
+
+
+        //body.MovePosition(position);
     }
 }

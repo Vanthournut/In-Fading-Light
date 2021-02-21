@@ -12,6 +12,7 @@ public class Player_Manager : MonoBehaviour
     private float fov_arc;
 
     private float light_decay; // Light Lost Per Second
+    private bool light_charging;
     private float current_light;
     private float light_capacity;
 
@@ -28,6 +29,7 @@ public class Player_Manager : MonoBehaviour
         fov_arc = 360f;
 
         light_capacity = 100f;
+        light_charging = false;
         current_light = light_capacity;
         light_decay = 1f;
 
@@ -49,11 +51,26 @@ public class Player_Manager : MonoBehaviour
 
         fov.SetDirection(direction);
         fov.SetRadius(current_light / light_capacity * fov_radius);
+        //fov.SetArc(current_light / light_capacity * 360f);
 
         current_light = current_light - light_decay * Time.deltaTime;
-        if (current_light < 0)
+        if (current_light < 0 && !light_charging)
         {
             current_light = 0;
+        }
+    }
+
+    public void SetLightCharging(bool charging)
+    {
+        this.light_charging = charging;
+    }
+
+    public void AddLight(float amount)
+    {
+        this.current_light += amount;
+        if(current_light > light_capacity)
+        {
+            current_light = light_capacity;
         }
     }
 }

@@ -16,7 +16,7 @@ public class Field_Of_View : MonoBehaviour
 
     Vector3 root;
 
-    float fov;
+    float arc;
     float direction;
     float radius;
     int rays;
@@ -31,9 +31,9 @@ public class Field_Of_View : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
         direction = 0f;
         radius = 3f;
-        fov = 90f;
+        arc = 90f;
         rays = 200;
-        delta_angle = fov / rays;
+        delta_angle = arc / rays;
         bleed = 0.2f;
 
     }
@@ -52,6 +52,8 @@ public class Field_Of_View : MonoBehaviour
         triangles = new int[3 * rays];
 
         vertices[0] = Vector3.zero;
+        //vertices[0] = root;
+
 
         for (int i = 0; i < rays + 1; i++)
         {
@@ -101,6 +103,13 @@ public class Field_Of_View : MonoBehaviour
 
     public void SetDirection(float new_direction)
     {
-        this.direction = new_direction-fov/2f;
+        this.direction = new_direction-arc/2f;
+    }
+
+    public void SetArc(float new_arc)
+    {
+        this.arc = new_arc;
+        delta_angle = arc / rays;
+        Debug.Log("New Arc: " + new_arc);
     }
 }

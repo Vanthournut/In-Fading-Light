@@ -53,7 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
-    passTag: PlayerRender
+    passTag: AlwaysVisible
     Event: 1000
     filterSettings:
       RenderQueueType: 1
