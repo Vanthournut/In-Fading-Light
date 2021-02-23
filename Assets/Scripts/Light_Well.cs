@@ -49,11 +49,9 @@ public class Light_Well : MonoBehaviour
         }
         else if(delay_countdown > 0f)
         {
-            Debug.Log("Delay Countdown: " + delay_countdown);
             delay_countdown -= Time.deltaTime;
             if(delay_countdown <= 0f)
             {
-                Debug.Log("Start Charging");
                 charging = true;
             }
         }
@@ -63,10 +61,8 @@ public class Light_Well : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Enter");
         if(collision.gameObject.name == "Player")
         {
-            Debug.Log("Player Enter");
 
             charging = false;
             collision.gameObject.GetComponent<Player_Manager>().SetLightCharging(true);
@@ -75,11 +71,9 @@ public class Light_Well : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        Debug.Log("Stay");
 
         if (collision.gameObject.name == "Player")
         {
-            Debug.Log("Player Stay");
             if (current > 0f)
             {
                 collision.gameObject.GetComponent<Player_Manager>().AddLight(transfer_speed * Time.deltaTime);
@@ -95,11 +89,9 @@ public class Light_Well : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
-        Debug.Log("Exit");
 
         if (collision.gameObject.name == "Player")
         {
-            Debug.Log("Player Exit");
 
             delay_countdown = delay;
             collision.gameObject.GetComponent<Player_Manager>().SetLightCharging(false);

@@ -16,6 +16,9 @@ public class Player_Manager : MonoBehaviour
     private float current_light;
     private float light_capacity;
 
+    private int max_health;
+    private int current_health;
+
     private float direction;
     private Vector3 dir_vector;
 
@@ -32,6 +35,9 @@ public class Player_Manager : MonoBehaviour
         light_charging = false;
         current_light = light_capacity;
         light_decay = 1f;
+
+        max_health = 100;
+        current_health = max_health;
 
         direction = 0f;
         dir_vector = Vector3.right;
@@ -51,7 +57,6 @@ public class Player_Manager : MonoBehaviour
 
         fov.SetDirection(direction);
         fov.SetRadius(current_light / light_capacity * fov_radius);
-        //fov.SetArc(current_light / light_capacity * 360f);
 
         current_light = current_light - light_decay * Time.deltaTime;
         if (current_light < 0 && !light_charging)
@@ -67,10 +72,23 @@ public class Player_Manager : MonoBehaviour
 
     public void AddLight(float amount)
     {
-        this.current_light += amount;
+        current_light += amount;
         if(current_light > light_capacity)
         {
             current_light = light_capacity;
+        }
+        else if (current_light < 0f)
+        {
+            current_light = 0f;
+        }
+    }
+
+    public void ModifyHealth(int amount)
+    {
+        current_health += amount;
+        if(current_health <= 0)
+        {
+            transform.GetComponent<SpriteRenderer>().color = Color.red;
         }
     }
 }
